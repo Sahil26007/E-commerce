@@ -47,7 +47,7 @@ const schema = new mongoose.Schema(
 
         gender : {
             type : String,
-            enum :["Male", "Female", "Other"],
+            enum :["male", "female", "Other"],
             required : true,      
         },
         dob : {
