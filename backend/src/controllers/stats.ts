@@ -209,14 +209,17 @@ export const getPieStats = TryCatch(async (req, res, next) => {
             "subtotal"
         ])
 
-        const [processingOrder,shippedOrder,deliveredOrder,categories,productsCount,outOfStock,allOrder] = await Promise.all([
+        const [processingOrder,shippedOrder,deliveredOrder,categories,productsCount,outOfStock,allOrder,allUsers,adminCount,userCount] = await Promise.all([
             Order.countDocuments({status:"processing"}),
             Order.countDocuments({status:"shipped"}),
             Order.countDocuments({status:"delivered"}),
             Products.distinct("category"),
             Products.countDocuments(),
             Products.countDocuments({stock:0}),
-            allOrderPromise
+            allOrderPromise,
+            User.find(["dob"]),
+            User.countDocuments({role:"admin"}),
+            User.countDocuments({role:"user"}),
         ]);
 
         const orderFullfillment = {
@@ -239,10 +242,48 @@ export const getPieStats = TryCatch(async (req, res, next) => {
             (prev,order) => prev + (order.total || 0),0
         );
 
+        const discount = allOrder.reduce(
+            (prev,order) => prev + (order.discount || 0),0
+        );
+
+        const productionCost = allOrder.reduce(
+            (prev,order) => prev + (order.shippingCharge || 0),0
+        );
+
+        const burnt = allOrder.reduce(
+            (prev,order)=> prev + (order.tax|| 0),0
+        );
+
+        const marketingCost = Math.round(grossMargin*(20/100));
+
+        const netMargin = grossMargin - discount - productionCost -burnt - marketingCost;
+
+        const ageDistribution = {
+            teen:  allUsers.filter((i)=> i.age<20).length,
+            adult: allUsers.filter((i)=> i.age>=20 && i.age<=49).length,
+            old: allUsers.filter((i)=> i.age>=50).length,
+        };
+
+        const adminCustomer = {
+            admin : adminCount,
+            customer : userCount,
+        };
+        
+        const revenueDistribution = {
+            netMargin,
+            discount,
+            productionCost,
+            burnt,
+            marketingCost,
+        };
+
         charts = {
             orderFullfillment,
             productcategories,
             stockAvailability,
+            revenueDistribution,
+            ageDistribution,
+            adminCustomer,
         };
 
         myCache.set("admin-pie-chart",JSON.stringify(charts));
