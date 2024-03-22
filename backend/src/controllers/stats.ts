@@ -3,7 +3,7 @@ import { TryCatch } from "../middlewares/error.js";
 import { Order } from "../models/order.js";
 import { Products } from "../models/product.js";
 import { User } from "../models/user.js";
-import { calculatePercentage } from "../utils/features.js";
+import { calculatePercentage, getInventories } from "../utils/features.js";
 
 export const getDashboardStats = TryCatch(async (req, res, next) => {
     let stats = {};
@@ -145,6 +145,11 @@ export const getDashboardStats = TryCatch(async (req, res, next) => {
                 }
             });
 
+           
+            const categoryCount: Record<string,number>[] = await getInventories({
+                categories,
+                productsCount,
+            });
 
             const userRatio = {
                 male : usersCount - femaleCount,
@@ -160,7 +165,7 @@ export const getDashboardStats = TryCatch(async (req, res, next) => {
             })
 
             stats={
-                categories,
+                categoryCount,
                 percentageChange,
                 count,
                 chart:{
@@ -170,6 +175,7 @@ export const getDashboardStats = TryCatch(async (req, res, next) => {
                 userRatio,
                 latestTransaction:modifiedLatestTranscation,
             };
+            myCache.set("admin-stats",JSON.stringify(stats));
     }
 
     res.status(200).json({
@@ -177,15 +183,7 @@ export const getDashboardStats = TryCatch(async (req, res, next) => {
         stats,
     });
 
-    myCache.set("admin-stats",JSON.stringify(stats));
 });
-
-
-
-
-
-
-
 
 
 
@@ -197,6 +195,63 @@ export const getLineStats = TryCatch(async (req, res, next) => {
 
 export const getPieStats = TryCatch(async (req, res, next) => {
 
+    let charts;
+
+    if(myCache.has("admin-pie-chart")) 
+        charts = JSON.parse(myCache.get("admin-pie-chart") as string);
+    else{
+
+        const allOrderPromise =  Order.find({}).select([
+            "tax",
+            "discount",
+            "total",
+            "shippingCharge",
+            "subtotal"
+        ])
+
+        const [processingOrder,shippedOrder,deliveredOrder,categories,productsCount,outOfStock,allOrder] = await Promise.all([
+            Order.countDocuments({status:"processing"}),
+            Order.countDocuments({status:"shipped"}),
+            Order.countDocuments({status:"delivered"}),
+            Products.distinct("category"),
+            Products.countDocuments(),
+            Products.countDocuments({stock:0}),
+            allOrderPromise
+        ]);
+
+        const orderFullfillment = {
+            processing : processingOrder ,
+            shipped : shippedOrder,
+            delivered : deliveredOrder,
+        };
+
+        const productcategories = await getInventories({
+            categories,
+            productsCount,
+        });
+
+        const stockAvailability = {
+            inStock : productsCount - outOfStock,
+            outOfStock,
+        }
+
+        const grossMargin = allOrder.reduce(
+            (prev,order) => prev + (order.total || 0),0
+        );
+
+        charts = {
+            orderFullfillment,
+            productcategories,
+            stockAvailability,
+        };
+
+        myCache.set("admin-pie-chart",JSON.stringify(charts));
+    }
+
+    return res.status(200).json({
+        success: true,
+        charts,
+    })
 });
 
 

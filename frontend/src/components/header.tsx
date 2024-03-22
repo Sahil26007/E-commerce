@@ -1,5 +1,6 @@
 import {Link} from 'react-router-dom'
 import { FaSearch, FaShoppingBag ,FaSignInAlt ,FaUser,FaSignOutAlt } from 'react-icons/fa'
+import { PiToggleLeftFill } from "react-icons/pi";
 import { useState } from 'react'
 
 const user = { _id : "dssd" , role :"admin"}
@@ -13,6 +14,11 @@ const Header = () => {
 
   return (
     <nav className='header'>
+
+    <label className="switch">
+        <input type="checkbox">
+        <span className="slider round"></span>
+    </label>
 
     <Link onClick={()=>setIsOpen(false)} to={"/"}>Home</Link>
     <Link onClick={()=>setIsOpen(false)} to={"/Search"}><FaSearch/></Link>

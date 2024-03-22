@@ -29,8 +29,8 @@ const schema = new mongoose.Schema({
         required : true,
     },
     subtotal:{
-        type : Number,
         required : true,
+        type : Number,
     },
     tax:{
         type : Number,
