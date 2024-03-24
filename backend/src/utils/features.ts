@@ -31,7 +31,7 @@ export const invalidateCache = async ({product,order,admin,userId,orderId,produc
         myCache.del(orderKey);
     }
     if(admin){
-
+        myCache.del(["admin-stats","admin-line-charts","admin-bar-charts","admin-pie-chart"]);
     }
 
 }
@@ -52,7 +52,7 @@ export const reduceStock = async(orderList :OrderListType[]) =>{
 export const calculatePercentage = (thisMonth:number , lastMonth : number) =>{
     if(lastMonth === 0) return thisMonth*100;
 
-    const percent = ((thisMonth - lastMonth)/lastMonth) *100;
+    const percent = ((thisMonth )/lastMonth) *100;
 
     return Number(percent.toFixed(0));
 };
@@ -78,4 +78,30 @@ export const getInventories = async(
 });
 
     return categoryCount;
+}
+
+interface MyDocument extends Document{
+    createdAt : Date;
+    discount? : number;
+    total? : number;
+}
+
+export const func1 = ({length,docArr,property,today}:{length:number,docArr:MyDocument[],property?:"total"|"discount",today:Date}) =>{
+
+            const data :number[] = new Array(length).fill(0);
+
+            docArr.forEach((i) =>{
+                const creationDate = i.createdAt;
+
+                const monthDiff = (today.getMonth() - creationDate.getMonth())%12;
+
+                if(monthDiff < length){
+                    if(property){
+                        data[length - monthDiff - 1] += i[property]!;
+                    }else
+                    data[length - monthDiff - 1] += 1;
+                }
+            })
+
+            return data;
 }
