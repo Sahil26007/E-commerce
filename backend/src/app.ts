@@ -1,4 +1,5 @@
 import express from 'express';
+import Stripe from 'stripe';
 import NodeCache from 'node-cache'
 import { config } from 'dotenv'
 
@@ -20,9 +21,10 @@ config({
 
 const port = process.env.PORT || 8000;
 const mongoURL = process.env.MONGODB_ADDRESS || "";
-
+const stripeKey = process.env.STRIPE_KEY || "";
 connectDB(mongoURL);
 
+export const stripe = new Stripe(stripeKey);
 export const myCache = new NodeCache();
 
 const app = express();
