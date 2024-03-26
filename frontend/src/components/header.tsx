@@ -2,10 +2,13 @@ import {Link} from 'react-router-dom'
 import { FaSearch, FaShoppingBag ,FaSignInAlt ,FaUser,FaSignOutAlt } from 'react-icons/fa'
 // import { PiToggleLeftFill } from "react-icons/pi";
 import { useState } from 'react'
+import { User } from '../types/types'
 
-const user = { _id : "" , role :""}
 
-const Header = () => {
+interface PropTypes{
+  user: User|null;
+}
+const Header = ({user}:PropTypes) => {
 
   const [isOpen,setIsOpen] = useState<boolean>(false);
   const logoutHandler =()=>{

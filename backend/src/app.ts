@@ -2,6 +2,7 @@ import express from 'express';
 import Stripe from 'stripe';
 import NodeCache from 'node-cache'
 import { config } from 'dotenv'
+import cors from 'cors'
 
 import { connectDB } from './utils/features.js';
 import { errorMiddleware } from './middlewares/error.js';
@@ -31,6 +32,8 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(cors());
+
 
 app.get("/", (req, res) => {
     res.send(`APi is running at api/v1/ `);
