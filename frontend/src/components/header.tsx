@@ -3,6 +3,9 @@ import { FaSearch, FaShoppingBag ,FaSignInAlt ,FaUser,FaSignOutAlt } from 'react
 // import { PiToggleLeftFill } from "react-icons/pi";
 import { useState } from 'react'
 import { User } from '../types/types'
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebase';
+import toast from 'react-hot-toast';
 
 
 interface PropTypes{
@@ -11,8 +14,14 @@ interface PropTypes{
 const Header = ({user}:PropTypes) => {
 
   const [isOpen,setIsOpen] = useState<boolean>(false);
-  const logoutHandler =()=>{
-    setIsOpen(false);
+  const logoutHandler =async()=>{
+    try {
+      await signOut(auth);
+      toast.success("Signed Out Successfully");
+      setIsOpen(false);
+    } catch (error) {
+      toast.error("Signed Out failed");
+    }
   }
 
   return (

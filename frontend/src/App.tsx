@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { userExist, userNotExist } from "./redux/reducer/userReducer";
 import { getUser } from "./redux/api/userApi";
 import { userReducerInitialTypes } from "./types/reducer-types";
+import ProtectedRoute from "./components/protected-route";
 
 
 
@@ -70,10 +71,15 @@ const App = () => {
       <Route path="/cart" element={<Cart/>}/>
 
       {/* Not Logged In Route */}
-        <Route path="/login" element={<Login/>}/>
+      
+        <Route path="/login" element={
+          <ProtectedRoute isAuthenticated={user? false:true}>
+            <Login/>
+          </ProtectedRoute>
+        }/>
 
       {/* Logged In user Routes */}
-      <Route>
+      <Route element={ <ProtectedRoute isAuthenticated={user? true:false}/>}>
         <Route path="/shipping" element={<Shipping/>}/>
         <Route path="/order" element={<Orders/>}/>
         <Route path="/order/:id" element={<OrderDetails/>}/>
@@ -82,9 +88,9 @@ const App = () => {
 
       {/* Admin Routes */}
       <Route
-  //     element={
-  //     <ProtectedRoute isAuthenticated={true} adminRoute={true} isAdmin={true} />
-  // }
+      element={
+      <ProtectedRoute isAuthenticated={true} adminRoute={true} isAdmin={user?.role === "admin" ? true : false} />
+  }
 >
   <Route path="/admin/dashboard" element={<Dashboard />} />
   <Route path="/admin/product" element={<Products />} />
