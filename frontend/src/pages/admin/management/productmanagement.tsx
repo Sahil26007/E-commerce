@@ -1,25 +1,47 @@
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
+import { useSelector } from "react-redux";
+import { userReducerInitialTypes } from "../../../types/reducer-types";
+import { useDeleteProductMutation, useProductDetailsQuery, useUpdateProductMutation } from "../../../redux/api/productApi";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
+import { server } from "../../../redux/store";
+import { Skeleton } from "../../../components/loader";
+import { responseToast } from "../../../utils/features";
 
-const img =
-  "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8&w=1000&q=804";
 
 const Productmanagement = () => {
-  const [price, setPrice] = useState<number>(2000);
-  const [stock, setStock] = useState<number>(10);
-  const [name, setName] = useState<string>("Puma Shoes");
-  const [photo, setPhoto] = useState<string>(img);
-  const [category, setCategory] = useState<string>("footwear");
 
+  const {user} = useSelector((state : {userReducer : userReducerInitialTypes}) => state.userReducer);
+  const params = useParams();
+  const navigate = useNavigate();
+
+  const {data,isLoading,isError} = useProductDetailsQuery(params.id!);
+ 
+  
+  const {price,stock,name,category,photo} =  data?.product || { 
+        name: "",
+        photo: "",
+        category: "",
+        price: 0,
+        stock: 0,
+      };
+
+  
+  
   const [priceUpdate, setPriceUpdate] = useState<number>(price);
   const [stockUpdate, setStockUpdate] = useState<number>(stock);
   const [nameUpdate, setNameUpdate] = useState<string>(name);
   const [categoryUpdate, setCategoryUpdate] = useState<string>(category);
-  const [photoUpdate, setPhotoUpdate] = useState<string>(photo);
+  const [photoUpdate, setPhotoUpdate] = useState<string>();
   const [photoFile, setPhotoFile] = useState<File>();
 
+      // console.log(photoUpdate);
+      const [updateProduct]  = useUpdateProductMutation();
+      const [deleteProduct]  = useDeleteProductMutation();
+           
   const changeImageHandler = (e: ChangeEvent<HTMLInputElement>) => {
+      
     const file: File | undefined = e.target.files?.[0];
 
     const reader: FileReader = new FileReader();
@@ -35,21 +57,56 @@ const Productmanagement = () => {
     }
   };
 
-  const submitHandler = (e: FormEvent<HTMLFormElement>): void => {
+  const submitHandler = async(e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setName(nameUpdate);
-    setPrice(priceUpdate);
-    setStock(stockUpdate);
-    setPhoto(photoUpdate);
+
+    const formData = new FormData();
+
+    if(nameUpdate) formData.set("name", nameUpdate);
+    if(categoryUpdate) formData.set("category", categoryUpdate);
+    if(photoFile)formData.set("photo",photoFile);
+    if(priceUpdate) formData.set("price", priceUpdate.toString() );
+    if(stockUpdate !== undefined) formData.set("stock", stockUpdate.toString());
+
+    const res = await updateProduct({
+      userid: user?._id!,
+      productid: data?.product._id!,
+      formData,
+    })
+
+    responseToast(res,navigate,"/admin/product");
   };
 
+  const deleteHandler = async()=>{
+
+    const res = await deleteProduct({
+        userid : user?._id!,
+        productid : data?.product._id!,
+      })
+
+      responseToast(res,navigate,"/admin/product");
+  }
+
+  useEffect(() => {
+    if(data){
+      setNameUpdate(data.product.name);
+      setCategoryUpdate(data.product.category);
+      setPhotoUpdate(data.product.photo);
+      setPriceUpdate(data.product.price);
+      setStockUpdate(data.product.stock);
+    }
+  }, [data])
+  
+  if(isError) return <Navigate to={"/404"} />
   return (
     <div className="admin-container">
       <AdminSidebar />
       <main className="product-management">
-        <section>
-          <strong>ID - fsdfsfsggfgdf</strong>
-          <img src={photo} alt="Product" />
+        {
+          isLoading? <Skeleton/> : <>
+            <section>
+          <strong>ID - {data?.product._id}</strong>
+          <img src= {`${server}/${photo}`} alt="Product" />
           <p>{name}</p>
           {stock > 0 ? (
             <span className="green">{stock} Available</span>
@@ -59,7 +116,7 @@ const Productmanagement = () => {
           <h3>₹{price}</h3>
         </section>
         <article>
-          <button className="product-delete-btn">
+          <button onClick={deleteHandler} className="product-delete-btn">
             <FaTrash />
           </button>
           <form onSubmit={submitHandler}>
@@ -107,10 +164,12 @@ const Productmanagement = () => {
               <input type="file" onChange={changeImageHandler} />
             </div>
 
-            {photoUpdate && <img src={photoUpdate} alt="New Image" />}
+            { photoUpdate && <img src={photoUpdate} alt="New Image" />}
             <button type="submit">Update</button>
           </form>
         </article>
+          </>
+        }
       </main>
     </div>
   );

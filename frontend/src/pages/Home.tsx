@@ -1,10 +1,27 @@
 
 import { Link } from "react-router-dom"
 import ProductCard from "../components/productCard"
+import { useLatestProductsQuery } from "../redux/api/productApi";
+import toast from "react-hot-toast";
+import { Skeleton } from "../components/loader";
+import { cartItems } from "../types/types";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/reducer/cartReducer";
 
 const Home = () => {
 
-  const addToCart = () => {};
+  const dispatch = useDispatch();
+  const {data,isLoading,isError} = useLatestProductsQuery("");
+
+  const addToCartHandler = (cartItem :cartItems) => {
+    if(cartItem.stock < 1) return toast.error(`${cartItem.name} is out of stock`);
+
+    dispatch(addToCart(cartItem));
+    toast.success(`Added ${cartItem.name} to Cart!`);
+  };
+
+  if(isError) toast.error("Cannot fetch the Products");
+
   return (
     <div className="home">
 
@@ -12,13 +29,24 @@ const Home = () => {
       <h1>Latest Products
         < Link to="/search" className="findmore">Find More</Link>
       </h1>
-
-      <ProductCard productId="fdssd" 
-      name="Macbook"
-       price={90000} 
-       handler={addToCart} 
-       photo="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/mbp14-spacegray-select-202310?wid=452&hei=420&fmt=jpeg&qlt=95&.v=1697230830200" 
-       stock={10} />
+      <main>
+      {
+        
+      isLoading? <Skeleton/>:
+        data?.product.map( (i) => (
+          <ProductCard 
+          key={i._id}
+          productId= {i._id} 
+          name= {i.name}
+          price={i.price} 
+          handler={addToCartHandler} 
+          photo={i.photo}
+          stock={i.stock} 
+          />
+        ))
+      }
+      
+      </main>
 
     </div>
   )

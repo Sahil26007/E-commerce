@@ -156,7 +156,7 @@ export const getDashboardStats = TryCatch(async (req, res, next) => {
                 female : femaleCount
             }
 
-            const modifiedLatestTranscation = latestTransaction.map((i)=>{
+            const modifiedLatestTransaction = latestTransaction.map((i)=>{
                 _id : i._id;
                 discount : i.discount;
                 total : i.total;
@@ -173,7 +173,7 @@ export const getDashboardStats = TryCatch(async (req, res, next) => {
                     revenue: orderMonthyRevenue,
                 },
                 userRatio,
-                latestTransaction:modifiedLatestTranscation,
+                latestTransaction:modifiedLatestTransaction,
             };
             myCache.set("admin-stats",JSON.stringify(stats));
     }

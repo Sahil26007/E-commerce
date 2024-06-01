@@ -1,10 +1,19 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { BiArrowBack } from "react-icons/bi";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { cartReducerInitialTypes } from "../types/reducer-types";
+import axios from "axios";
+import { server } from "../redux/store";
+import toast from "react-hot-toast";
+import { saveShippingInfo } from "../redux/reducer/cartReducer";
 
 const Shipping = () => {
 
-const navigate = useNavigate();
+  const { cartItems  ,total} =  useSelector((state: { cartReducer : cartReducerInitialTypes}) => state.cartReducer);
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const [shippingInfo, setShippingInfo] = useState({
     address: "",
@@ -13,6 +22,26 @@ const navigate = useNavigate();
     country: "",
     pincode: "",
   });
+  
+  const submitHandler = async(e : FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch(saveShippingInfo(shippingInfo));
+    try {
+      const {data} = await axios.post(`${server}/api/v1/payment/create`,{
+        amount : total,
+      },{
+        headers:{
+          "Content-Type" : "application/json",
+        },
+      })
+      navigate("/pay",{
+        state : data.clientSecret,
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error("something went wrong");
+    }
+  }
 
   const changeHandler = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -20,13 +49,18 @@ const navigate = useNavigate();
     setShippingInfo(prev => ({...prev,[e.target.name]:e.target.value}));
   };
 
+  useEffect(() => {
+      if(cartItems.length <= 0) return navigate('/cart');
+  }, [cartItems])
+  
+
   return (
     <div className="shipping">
       <button className="backBtn" onClick={() => navigate("/cart") }>
         <BiArrowBack />
       </button>
 
-      <form>
+      <form onSubmit={submitHandler}>
         <h1>Shipping Address</h1>
 
         <input

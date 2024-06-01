@@ -99,7 +99,36 @@
 
 
 
+.checkout-container{
+  max-width: 500px;
+  width: 100%;
+  margin: auto;
+  > form{
+    @include flex(column,flex-start,stretch,2rem) ;
+    width: 100%;
+    font-size: 1.1rem;
+  
+  > button{
+    background-color: #4170b2; 
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1.2rem;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 8px;
+    transition-duration: 0.4s;
+  
 
+  &:hover{
+    background-color: #2e638e;
+  }
+  }
+}
+}
 
 
 
@@ -288,7 +317,22 @@
       animation: loading-animation 0.5s linear infinite;
     }
   }
-  
+
+  .skeleton-loader{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .skeleton-shape{
+    height: 30px;
+    width: 100%;
+    background-color: #cbc1c1;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    animation: skeleton-loading 1.5s infinite ;
+  }
+
+
   @keyframes loading-animation {
     to {
       transform: rotateZ(360deg);
@@ -297,6 +341,18 @@
   @keyframes up-and-down {
     to {
       transform: translate(-50%, -20%);
+    }
+  }
+
+  @keyframes skeleton-loading {
+    0%{
+      opacity: 0.6;
+    }
+    50%{
+      opacity: 1;
+    }
+    100%{
+      opacity: 0.6;
     }
   }
   

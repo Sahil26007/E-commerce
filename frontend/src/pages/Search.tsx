@@ -1,20 +1,42 @@
 import { useState } from "react"
 import ProductCard from "../components/productCard";
+import { useCategoriesProductsQuery, useSearchProductsQuery } from "../redux/api/productApi";
+import { customError } from "../types/api-types";
+import toast from "react-hot-toast";
+import { Skeleton } from "../components/loader";
+import { useDispatch } from "react-redux";
+import { addToCart } from "../redux/reducer/cartReducer";
+import { cartItems } from "../types/types";
 
 
 const Search = () => {
+
+  const {data:categoryResponse , isLoading:loadingCategory ,isError ,error,} = useCategoriesProductsQuery("")
+  const dispatch = useDispatch();
   const[search,setSearch] = useState("");
   const[sort,setSort] = useState("");
-  const[maxPrice,setMaxPrice] = useState(9999999);
+  const[maxPrice,setMaxPrice] = useState(999999);
   const[category,setCategory] = useState("");
   const[page,setPage] = useState(1);
 
-  const addToCart = () => {
+  const {data:searchData , isLoading:searchLoading} = useSearchProductsQuery({search,sort,category,page,price:maxPrice});
 
+  if(isError){
+    const err = error as customError;
+    toast.error(err.data.message);
   }
 
+  const addToCartHandler = (cartItem :cartItems) => {
+    if(cartItem.stock < 1) return toast.error(`${cartItem.name} is out of stock`);
+
+    dispatch(addToCart(cartItem));
+    toast.success(`Added ${cartItem.name} to Cart!`);
+  };
+
+  let totalPage = 1;
+  if(searchData) totalPage = searchData.totalPage;
   const isPrevPage = page > 1;
-  const isNextPage = page <4;
+  const isNextPage = page < totalPage;
 
   return (
     <div className="productsearch">
@@ -34,7 +56,7 @@ const Search = () => {
           <input 
             type="range"
             min={1}
-            max={9999999}
+            max={99999}
             value={maxPrice}
             onChange={e => setMaxPrice(Number(e.target.value))}
           />
@@ -43,9 +65,12 @@ const Search = () => {
         <h4>Category</h4>
         <select value={category} onChange={e=> setCategory(e.target.value)} >
           <option value="" >All Categories</option>
-          <option value="Electronics" >Electronics</option>
-          <option value="Clothing" >Clothing & Accessories</option>
-          <option value="Home" >Home & Kitchen</option>
+          {
+            !loadingCategory && categoryResponse?.categories.map( (i)=>
+            <option key={i} value={i} >{i.toUpperCase()}</option>
+            
+            )
+          }          
         </select>
       </div>
     </aside>
@@ -55,16 +80,23 @@ const Search = () => {
       <input type="text" placeholder="Search by name..." value={search} onChange={(e) => setSearch(e.target.value)}/>
 
       <div className="searchProductList">
-        <ProductCard
-          productId="fdssd" 
-          name="Macbook"
-          price={90000} 
-          handler={addToCart} 
-          photo="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/mbp14-spacegray-select-202310?wid=452&hei=420&fmt=jpeg&qlt=95&.v=1697230830200" 
-          stock={10}
+       {
+        searchLoading? (<Skeleton/>) :(searchData?.products.map((i)=>(
+          <ProductCard
+            key={i._id}
+            productId={i._id}
+            name={i.name}
+            price={i.price} 
+            handler={addToCartHandler} 
+            photo={i.photo}
+            stock={i.price}
          />
+        )))
+       } 
       </div>
-      <article>
+       {
+        searchData && searchData.totalPage>1 && (
+          <article>
         <button 
             disabled={!isPrevPage} 
             onClick={() => setPage((prev) => (prev - 1))}
@@ -72,7 +104,7 @@ const Search = () => {
             Prev
         </button>
 
-        <span>{page} of 4</span>
+        <span>{page} of {searchData.totalPage}</span>
         
         <button
             disabled={!isNextPage}
@@ -81,6 +113,8 @@ const Search = () => {
           Next
         </button>
       </article>
+        )
+       }
     </main>
     </div>
   )
