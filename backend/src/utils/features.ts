@@ -1,4 +1,4 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 import { InvalidCacheProps, OrderListType } from "../types/types.js";
 import { Products } from "../models/product.js";
 import { myCache } from "../app.js";
