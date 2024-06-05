@@ -2,8 +2,7 @@ import mongoose from "mongoose";
 import { InvalidCacheProps, OrderListType } from "../types/types.js";
 import { Products } from "../models/product.js";
 import { myCache } from "../app.js";
-import ErrorHandler from "./utility-class.js";
-import { Order } from "../models/order.js";
+
 
 export const connectDB = (url:string) =>{
     mongoose
@@ -40,7 +39,7 @@ export const reduceStock = async(orderList :OrderListType[]) =>{
     for (let i = 0; i < orderList.length; i++) {
         const order = orderList[i];
         let product = await Products.findById(order.productID);
-        if(!product) throw new ErrorHandler("Product not found",404);
+        if(!product) throw new Error("Product not found");
 
         product.stock -= order.quantity;
 
@@ -83,17 +82,24 @@ export const getInventories = async(
 interface MyDocument extends Document{
     createdAt : Date;
     discount? : number;
-    total? : number;
+    amount? : number;
 }
 
-export const func1 = ({length,docArr,property,today}:{length:number,docArr:MyDocument[],property?:"total"|"discount",today:Date}) =>{
+type FuncProps = {
+    length: number;
+    docArr: MyDocument[];
+    property?: "discount" | "amount";
+    today: Date;
+  };
+
+export const func1 = ({length,docArr,property,today}: FuncProps) =>{
 
             const data :number[] = new Array(length).fill(0);
 
             docArr.forEach((i) =>{
                 const creationDate = i.createdAt;
 
-                const monthDiff = (today.getMonth() - creationDate.getMonth())%12;
+                const monthDiff = (today.getMonth() - creationDate.getMonth()+12)%12;
 
                 if(monthDiff < length){
                     if(property){

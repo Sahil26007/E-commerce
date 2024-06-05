@@ -8,6 +8,17 @@ import { cartItems } from "../types/types";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/reducer/cartReducer";
 
+
+export type prodType = {
+  name:string;
+  photo:string;
+  category:string;
+  price:number;
+  _id:string;
+  stock:number;
+}
+
+
 const Home = () => {
 
   const dispatch = useDispatch();
@@ -33,7 +44,7 @@ const Home = () => {
       {
         
       isLoading? <Skeleton/>:
-        data?.product.map( (i) => (
+        data?.product.map( (i:prodType) => (
           <ProductCard 
           key={i._id}
           productId= {i._id} 

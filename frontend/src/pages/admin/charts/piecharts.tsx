@@ -1,4 +1,4 @@
-import AdminSidebar from "../../../components/admin/AdminSidebar";
+
 import { DoughnutChart, PieChart } from "../../../components/admin/Charts";
 import {categories} from "../../../assets/data.json";
 import { useSelector } from "react-redux";
@@ -6,6 +6,7 @@ import { userReducerInitialTypes } from "../../../types/reducer-types";
 import { usePieQuery } from "../../../redux/api/dashboardApi";
 import { Skeleton } from "../../../components/loader";
 import { Navigate } from "react-router-dom";
+import AdminSidebar from "../../../components/admin/AdminSidebar";
 
 const PieCharts = () => {
   const { user } = useSelector(

@@ -1,7 +1,7 @@
 import { ReactElement, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Column } from "react-table";
-import AdminSidebar from "../../components/admin/AdminSidebar";
+
 import TableHOC from "../../components/admin/TableHOC";
 import { useSelector } from "react-redux";
 import { userReducerInitialTypes } from "../../types/reducer-types";
@@ -9,6 +9,7 @@ import { useAllOrderQuery } from "../../redux/api/orderApi";
 import { customError } from "../../types/api-types";
 import toast from "react-hot-toast";
 import { Skeleton } from "../../components/loader";
+import AdminSidebar from "../../components/admin/AdminSidebar";
 
 interface DataType {
   user: string;
@@ -81,7 +82,7 @@ const Transaction = () => {
               {i.status}
             </span>
           ),
-          quantity: i.orderItems.length,
+          quantity: i.orderList.length,
           action: <Link to={`/admin/transaction/${i._id}`}>Manage</Link>,
         }))
       );

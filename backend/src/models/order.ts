@@ -46,7 +46,7 @@ const schema = new mongoose.Schema({
         required : true,
         default : 0,
     },
-    total:{
+    amount:{
         type : Number,
         required : true,
     },
@@ -83,4 +83,4 @@ const schema = new mongoose.Schema({
     timestamps : true,
 })
 
-export const Order = mongoose.model('Order',schema);
+export const Order = mongoose.model("Order",schema);

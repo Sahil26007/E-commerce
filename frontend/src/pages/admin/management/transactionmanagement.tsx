@@ -1,18 +1,13 @@
 import { FaTrash } from "react-icons/fa";
 import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
-import AdminSidebar from "../../../components/admin/AdminSidebar";
 import { server } from "../../../redux/store";
-import { Order, orderItems } from "../../../types/types";
+import { Order, orderList  } from "../../../types/types";
 import { useSelector } from "react-redux";
 import { userReducerInitialTypes } from "../../../types/reducer-types";
 import { useDeleteOrderMutation, useOrderDetailQuery, useUpdateOrderMutation } from "../../../redux/api/orderApi";
 import { Skeleton } from "../../../components/loader";
 import { responseToast } from "../../../utils/features";
-
-
-const orderItems: orderItems[] = [
-  
-];
+import AdminSidebar from "../../../components/admin/AdminSidebar";
 
 const defaultData: Order = {
   shippingInfo: {
@@ -22,7 +17,7 @@ const defaultData: Order = {
     country: "",
     pincode: "",
   },
-  orderItems: [],
+  orderList: [],
   subtotal: 0,
   total: 0,
   tax: 0,
@@ -48,7 +43,7 @@ const TransactionManagement = () => {
 
   const {
     shippingInfo: { address, city, state, country, pincode },
-    orderItems,
+    orderList,
     user: { name },
     status,
     tax,
@@ -96,7 +91,7 @@ const TransactionManagement = () => {
         >
           <h2>Order Items</h2>
 
-          {orderItems.map((i) => (
+          {orderList.map((i) => (
             <ProductCard
               key={i._id}
               name={i.name}
@@ -158,7 +153,7 @@ const ProductCard = ({
   price,
   quantity,
   productId,
-}: orderItems) => (
+}: orderList) => (
   <div className="transaction-product-card">
     <img src={photo} alt={name} />
     <Link to={`/product/${productId}`}>{name}</Link>

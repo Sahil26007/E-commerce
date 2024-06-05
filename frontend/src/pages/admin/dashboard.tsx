@@ -2,7 +2,6 @@ import { BiMaleFemale } from "react-icons/bi";
 import { BsSearch } from "react-icons/bs";
 import { FaRegBell } from "react-icons/fa";
 import { HiTrendingDown, HiTrendingUp } from "react-icons/hi";
-import AdminSidebar from "../../components/admin/AdminSidebar";
 import { BarChart, DoughnutChart } from "../../components/admin/Charts";
 import Table from "../../components/admin/DashboardTable";
 import { useStatsQuery } from "../../redux/api/dashboardApi";
@@ -11,6 +10,7 @@ import { userReducerInitialTypes } from "../../types/reducer-types";
 import { Skeleton } from "../../components/loader";
 import { Navigate } from "react-router-dom";
 import { getLastMonths } from "../../utils/features";
+import AdminSidebar from "../../components/admin/AdminSidebar";
 
 const userImg =
   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJxA5cTf-5dh5Eusm0puHbvAhOrCRPtckzjA&usqp";

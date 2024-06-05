@@ -1,11 +1,11 @@
 import { useSelector } from "react-redux";
-import AdminSidebar from "../../../components/admin/AdminSidebar";
 import { BarChart } from "../../../components/admin/Charts";
 import { getLastMonths } from "../../../utils/features";
 import { userReducerInitialTypes } from "../../../types/reducer-types";
 import { useBarQuery } from "../../../redux/api/dashboardApi";
 import { customError } from "../../../types/api-types";
 import toast from "react-hot-toast";
+import AdminSidebar from "../../../components/admin/AdminSidebar";
 
 const { last12Months: months , last6Months :months6} = getLastMonths()
 

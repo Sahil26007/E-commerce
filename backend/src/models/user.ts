@@ -5,13 +5,12 @@ interface IUser extends Document {
     _id : string;
     name : string;
     email: string;
-    photo : string;
+    photo?: string;
     role : "admin" | "user";
     gender : "male" | "female";
     dob : Date;
     createdAt : Date;
     updatedAt : Date;
-
     age: number;
 }
 
@@ -47,7 +46,7 @@ const schema = new mongoose.Schema(
 
         gender : {
             type : String,
-            enum :["male", "female", "Other"],
+            enum :["male", "female"],
             required : true,      
         },
         dob : {
@@ -59,12 +58,12 @@ const schema = new mongoose.Schema(
         timestamps: true,
     });
 
-    schema.virtual("age").get(function(){
+    schema.virtual("age").get(function(this:IUser){
         const today = new Date();
         const dob = this.dob;
         let age = today.getFullYear() - dob.getFullYear();
         
-        if(today.getMonth() <= dob.getMonth() || ( today.getMonth === dob.getMonth && today.getDate() < dob.getDate())) age--;
+        if(today.getMonth() <= dob.getMonth() || ( today.getMonth() === dob.getMonth() && today.getDate() < dob.getDate())) age--;
 
         return age;
     })

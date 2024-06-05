@@ -34,10 +34,10 @@ export type cartItems ={
     stock:number;
 }
 
-export type orderItems = Omit<cartItems,"stock"> & {_id : string}
+export type orderList = Omit<cartItems,"stock"> & {_id : string}
 
 export type Order = {
-    orderItems : orderItems[];
+    orderList : orderList[];
     shippingInfo : shippingInfo;
     subtotal :number;
     total :number;
@@ -63,7 +63,7 @@ type CountAndChange = {
 type latestTransaction = {
     _id : string;
     discount : number;
-    total : number;
+    amount : number;
     status : string;
     quantity : number;
 }
