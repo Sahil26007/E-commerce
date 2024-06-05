@@ -16,7 +16,7 @@ const Linecharts = () => {
     const {user} = useSelector(
       (state:{userReducer:userReducerInitialTypes}) => state.userReducer
     )
-    console.log(user)
+
     const {data,isLoading,error,isError} = useLineQuery(user?._id!)
 
     const userCount = data?.charts.user || []

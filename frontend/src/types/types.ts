@@ -89,7 +89,7 @@ export type pie = {
             shipped: number;
             delivered: number;
         },
-        productcategories: Record<string, number>[],
+        productCategories: Record<string, number>[],
         stockAvailability: {
             inStock: number;
             outOfStock: number;
