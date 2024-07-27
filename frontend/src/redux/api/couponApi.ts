@@ -23,7 +23,10 @@ export const couponApi = createApi({
             query: ({ id, formData }) => ({
                 url: `new?id=${id}`,
                 method: 'POST',
-                body: formData,
+                body: JSON.stringify(formData),
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             }),
             invalidatesTags: ["Coupon"],
         }),

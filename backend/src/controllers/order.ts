@@ -83,7 +83,7 @@ export const newOrder = TryCatch( async(
         orderList,
         user,
         tax,
-        total,
+        amount,
         shippingCharge,
         subtotal,
         discount,
@@ -95,7 +95,8 @@ export const newOrder = TryCatch( async(
         !orderList ||
         !user ||
         !tax||
-        !subtotal
+        !subtotal ||
+        !amount
       ) return next(new ErrorHandler("Please Enter All Fields",400));
 
     const order = await Order.create({
@@ -103,7 +104,7 @@ export const newOrder = TryCatch( async(
         orderList,
         user,
         tax,
-        total,
+        amount,
         shippingCharge,
         subtotal,
         discount,

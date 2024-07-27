@@ -75,7 +75,7 @@ export interface NewOrderRequestBody {
     tax:number;
     shippingCharge:number;
     discount:number;
-    total:number;
+    amount:number;
     status:string;
     orderList: OrderListType[]; // here array is use as more than one order may be there
 }

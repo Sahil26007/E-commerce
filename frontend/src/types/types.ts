@@ -57,7 +57,6 @@ export type Order = {
     _id : string;
 }
 
-
 type CountAndChange = {
     revenue :number;
     product : number;

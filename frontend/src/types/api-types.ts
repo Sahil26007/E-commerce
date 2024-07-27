@@ -85,7 +85,10 @@ export type createProductsRequest = {
 
 export type createCouponRequest = {
     id :string,
-    formData : FormData,
+    formData: {
+        code: string;
+        amount: number;
+    };
 }
 
 export type updateProductRequest = {

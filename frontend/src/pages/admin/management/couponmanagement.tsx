@@ -1,13 +1,13 @@
 import { ReactElement, useState, useEffect } from "react";
 import { Column } from "react-table";
-import { Link } from "react-router-dom";
 import TableHOC from "../../../components/admin/TableHOC";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
 import { useSelector } from "react-redux";
 import { userReducerInitialTypes } from "../../../types/reducer-types";
-import { useAllCouponsQuery } from "../../../redux/api/couponApi";
+import { useAllCouponsQuery, useDeleteCouponMutation } from "../../../redux/api/couponApi";
 import toast from "react-hot-toast";
-import { FaCopy } from "react-icons/fa";
+import { FaCopy, FaTrash } from "react-icons/fa";
+import { responseToast } from "../../../utils/features";
 
 type DataType = {
     code: string;
@@ -40,9 +40,10 @@ const Coupon = () => {
         (state: { userReducer: userReducerInitialTypes }) => state.userReducer
     );
 
-    console.log(user);
 
     const { data, error, isLoading } = useAllCouponsQuery(user?._id!);
+
+    const [deleteCoupon] = useDeleteCouponMutation();
 
     const [rows, setRows] = useState<DataType[]>([]);
 
@@ -52,12 +53,19 @@ const Coupon = () => {
         });
     };
 
+    const deleteHandler = async(couponId: string) =>{
+        const res = await deleteCoupon({userId:user?._id! ,couponId})
+        responseToast(res,null,"")
+    }
+
     useEffect(() => {
         if (data) {
             const formattedData = data.coupons.map((coupon) => ({
                 code: coupon.code,
                 amount: coupon.amount,
-                action: <Link to={`/order/${coupon._id}`}>Manage</Link>,
+                action: (<button onClick={() => deleteHandler(coupon._id)} >
+                <FaTrash />
+              </button>),
                 copy: (
                     <button onClick={() => handleCopy(coupon.code)}>
                         <FaCopy />

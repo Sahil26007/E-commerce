@@ -13,7 +13,7 @@ const CouponCode = () => {
   const [code, setCode] = useState<string>("");
   const [amount, setAmount] = useState<number>(0);
 
-  const [newCoupon] = useCreateCouponMutation();
+  const [createCoupon] = useCreateCouponMutation();
 
   const navigate = useNavigate();
 
@@ -21,21 +21,21 @@ const CouponCode = () => {
     e.preventDefault();
 
     if (!code || amount <= 0) {
-      return toast.error("Both fields are required and amount must be greater than 0");
+        return toast.error("Both fields are required and amount must be greater than 0");
     }
 
-    const coupon = `${code}${amount}`;
-    const formData = new FormData();
-    formData.set("code", coupon);
-    formData.set("amount", amount.toString());
+    const formData = {
+        code: code,
+        amount: amount,
+    };
 
     try {
-      const res = await newCoupon({ id: user?._id!, formData });
-      responseToast(res, navigate, "/admin/coupon");
+        const res = await createCoupon({ id: user?._id!, formData });
+        responseToast(res, navigate, "/admin/coupon");
     } catch (error) {
-      toast.error("Failed to create coupon");
+        toast.error("Failed to create coupon");
     }
-  };
+};
 
   return (
     <div className="admin-container">
