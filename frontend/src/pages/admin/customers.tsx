@@ -88,7 +88,7 @@ const Customers = () => {
           gender: i.gender,
           role: i.role,
           action: (
-            <button onClick={() => deleteHandler(i._id)}>
+            <button onClick={() => deleteHandler(i._id)} disabled={i.role === 'admin'}>
               <FaTrash />
             </button>
           )

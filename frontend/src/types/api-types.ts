@@ -1,4 +1,4 @@
-import { Order, pie, Product, Stats, User, bar, cartItems, line, shippingInfo } from "./types";
+import { Order, pie, Product, Stats, User, bar, cartItems, line, shippingInfo, Coupon } from "./types";
 
 export type messageResponse = {
     success : boolean,
@@ -23,6 +23,11 @@ export type categoryResponse ={
 export type allProductResponse={
     success:boolean,
     products : Product[],
+}
+
+export type allCouponResponse={
+    success:boolean,
+    coupons : Coupon[],
 }
 
 export type productDetailsResponse ={
@@ -78,6 +83,10 @@ export type createProductsRequest = {
 }
 
 
+export type createCouponRequest = {
+    id :string,
+    formData : FormData,
+}
 
 export type updateProductRequest = {
     userid :string,
@@ -87,6 +96,11 @@ export type updateProductRequest = {
 export type deleteProductRequest = {
     userid :string,
     productid : string,
+}
+
+export type deleteCouponRequest = {
+    userId :string,
+    couponId : string,
 }
 
 export type newOrderRequest = {

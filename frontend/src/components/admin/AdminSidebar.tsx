@@ -59,7 +59,7 @@ const AdminSidebar = () => {
             : {}
         }
       >
-        <h2>Logo.</h2>
+        <h2 ><Link to="/">STORE xyz.</Link></h2>
         <DivOne location={location} />
         <DivTwo location={location} />
         <DivThree location={location} />
@@ -100,6 +100,12 @@ const DivOne = ({ location }: { location: Location }) => (
         url="/admin/transaction"
         text="Transaction"
         Icon={AiFillFileText}
+        location={location}
+      />
+      <Li
+        url="/admin/coupon"
+        text="Coupons"
+        Icon={RiCoupon3Fill}
         location={location}
       />
     </ul>

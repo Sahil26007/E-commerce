@@ -16,6 +16,11 @@ export type Product = {
     _id:string;
     stock:number;
 }
+export type Coupon = {
+    code: string;
+    amount: number;
+    _id:string;
+}
 
 export type shippingInfo ={
     address :string;

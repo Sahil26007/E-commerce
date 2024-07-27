@@ -14,4 +14,4 @@ const schema = new mongoose.Schema({
 
 export const Coupon = mongoose.model("Coupon", schema);
 
-// 优惠���类型
+// 

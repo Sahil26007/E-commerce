@@ -6,10 +6,24 @@
     width: 100%;
 
     > section{
+
         width: 100%;
         height: 16.75rem;
         margin: auto;
-        background: url("../assets/images/ss.jpg") no-repeat center / cover;
+        overflow: hidden;
+        // background: url("../assets/images/ss.jpg") no-repeat center / cover;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        .bear-carousel__container {
+            height: 100%; 
+            width: 100%;
+        }
+
+        .bear-carousel__slide {
+            height: 100%; 
+        }
     }
 
     > h1{

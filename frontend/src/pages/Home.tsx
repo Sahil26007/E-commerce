@@ -7,6 +7,7 @@ import { Skeleton } from "../components/loader";
 import { cartItems } from "../types/types";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/reducer/cartReducer";
+import CustomCarousel from "./CustomCarousel";
 
 
 export type prodType = {
@@ -36,7 +37,8 @@ const Home = () => {
   return (
     <div className="home">
 
-      <section> </section>
+      <section> <CustomCarousel /> </section>
+     
       <h1>Latest Products
         < Link to="/search" className="findmore">Find More</Link>
       </h1>

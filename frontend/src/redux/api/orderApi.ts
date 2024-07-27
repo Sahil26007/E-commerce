@@ -5,7 +5,7 @@ import { OrderDetailResponse, allorderResponse, messageResponse, newOrderRequest
 export const orderApi = createApi({
     reducerPath : "orderApi",
     baseQuery :fetchBaseQuery({
-        baseUrl :  `http://localhost:8000/api/v1/order/`,
+        baseUrl :  `${import.meta.env.VITE_SERVER}/api/v1/order/`,
     }),
     tagTypes : ["orders"],
     endpoints : (builder) => ({

@@ -4,7 +4,7 @@ import { allProductResponse, categoryResponse, createProductsRequest, messageRes
 export const productApi = createApi({
     reducerPath : "productApi",
     baseQuery:  fetchBaseQuery({
-        baseUrl :  `http://localhost:8000/api/v1/product/`
+        baseUrl :  `${import.meta.env.VITE_SERVER}/api/v1/product/`
     }),
     tagTypes:["products"],
     endpoints: (builder) => ({ 

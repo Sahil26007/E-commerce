@@ -2,13 +2,11 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { allUserResponse, deleteUserRequest, messageResponse, userResponse } from "../../types/api-types";
 import { User } from "../../types/types";
 import axios from "axios";
-// import { server } from "../store";
-
 
 export const userApi = createApi({
     reducerPath : "userApi",
     baseQuery:  fetchBaseQuery({
-        baseUrl :  `http://localhost:8000/api/v1/user/`
+        baseUrl :  `${import.meta.env.VITE_SERVER}/api/v1/user/`
     }),
     tagTypes:["users"],
     endpoints: (builder) => ({
