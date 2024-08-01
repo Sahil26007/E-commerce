@@ -7,7 +7,7 @@ import { Skeleton } from "../components/loader";
 import { cartItems } from "../types/types";
 import { useDispatch } from "react-redux";
 import { addToCart } from "../redux/reducer/cartReducer";
-import CustomCarousel from "./CustomCarousel";
+// import CustomCarousel from "./CustomCarousel";
 
 
 export type prodType = {
@@ -25,6 +25,7 @@ const Home = () => {
   const dispatch = useDispatch();
   const {data,isLoading,isError} = useLatestProductsQuery("");
 
+    
   const addToCartHandler = (cartItem :cartItems) => {
     if(cartItem.stock < 1) return toast.error(`${cartItem.name} is out of stock`);
 
@@ -38,7 +39,7 @@ const Home = () => {
   return (
     <div className="home">
 
-      <section> <CustomCarousel /> </section>
+      <section>  </section>
      
       <h1>Latest Products
         < Link to="/search" className="findmore">Find More</Link>

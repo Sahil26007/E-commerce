@@ -81,7 +81,7 @@ const Search = () => {
 
       <div className="searchProductList">
        {
-        searchLoading? (<Skeleton/>) :(searchData?.products.map((i)=>(
+        searchLoading? (<Skeleton/>) :(searchData?.product.map((i)=>(
           <ProductCard
             key={i._id}
             productId={i._id}

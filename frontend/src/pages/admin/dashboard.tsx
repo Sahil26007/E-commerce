@@ -1,6 +1,6 @@
 import { BiMaleFemale } from "react-icons/bi";
 import { BsSearch } from "react-icons/bs";
-import { FaRegBell } from "react-icons/fa";
+// import { FaRegBell } from "react-icons/fa";
 import { HiTrendingDown, HiTrendingUp } from "react-icons/hi";
 import { BarChart, DoughnutChart } from "../../components/admin/Charts";
 import Table from "../../components/admin/DashboardTable";

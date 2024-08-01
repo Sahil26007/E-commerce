@@ -78,12 +78,11 @@ const Products = () => {
     toast.error(err.data.message)
   }
 
-  console.log(data);
 
   useEffect(() => {
     if(data)
         setRows(
-          data.products.map((i) => ({
+          data.product.map((i) => ({
             photo: <img src={`${i.photo}`} />,
             name: i.name,
             price: i.price,

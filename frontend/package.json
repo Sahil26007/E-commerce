@@ -14,7 +14,7 @@
     "@stripe/react-stripe-js": "^2.6.2",
     "@stripe/stripe-js": "^3.2.0",
     "axios": "^1.6.8",
-    "bear-react-carousel": "^5.0.1",
+    "bear-react-carousel": "^5.1.0",
     "chart.js": "^4.4.1",
     "firebase": "^10.7.1",
     "moment": "^2.30.1",

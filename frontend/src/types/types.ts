@@ -42,6 +42,7 @@ export type cartItems ={
 export type orderList = Omit<cartItems,"stock"> & {_id : string}
 
 export type Order = {
+    quantity: any;
     orderList : orderList[];
     shippingInfo : shippingInfo;
     subtotal :number;

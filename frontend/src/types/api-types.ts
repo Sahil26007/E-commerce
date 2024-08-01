@@ -22,7 +22,7 @@ export type categoryResponse ={
 
 export type allProductResponse={
     success:boolean,
-    products : Product[],
+    product : Product[],
 }
 
 export type allCouponResponse={
