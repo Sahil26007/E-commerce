@@ -55,6 +55,7 @@ const Transaction = () => {
   );
   const { data, isLoading, isError, error } = useAllOrderQuery(user?._id!);
 
+  
   const [rows, setRows] = useState<DataType[]>([]);
 
   if (isError) {
@@ -67,7 +68,7 @@ const Transaction = () => {
       setRows(
         data.orders.map((i) => ({
           user: i.user.name,
-          amount: i.total,
+          amount: i.amount,
           discount: i.discount,
           status: (
             <span

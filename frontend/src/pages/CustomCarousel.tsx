@@ -28,7 +28,7 @@ import BearCarousel, {
           return { widthRatio: 1.5, heightRatio: 1 };
       } else {
           // Desktop
-          return { widthRatio: 21.5, heightRatio: 5.2 };
+          return { widthRatio: 21.5, heightRatio: 5.6 };
       }
   };
 

@@ -7,7 +7,8 @@ import { rm } from "fs";
 import { myCache } from "../app.js";
 import { json } from "stream/consumers";
 import { invalidateCache } from "../utils/features.js";
-
+import { getDataUri } from "../utils/dataUri.js";
+import cloudinary from "cloudinary"
 
 // using cache memory for performance improvement 
 export const getLatestProduct = TryCatch( async(
@@ -101,18 +102,19 @@ export const newProduct = TryCatch(async (
     if(!photo)return next(new ErrorHandler("Please add a photo",400));
 
     if(!name || !category || !price || !stock){
-        rm(photo.path,()=>{
-            console.log("Deleted");
-        })
         return next(new ErrorHandler("Please add all fields",400));
     }
+
+    const photoUri = getDataUri(photo);
+
+    const mycloud = await cloudinary.v2.uploader.upload(photoUri.content!)
 
     await Products.create({
         name,
         price,
         stock,
         category : category.toLowerCase(),
-        photo : photo.path,
+        photo : mycloud.secure_url,
     })
 
     await invalidateCache({product: true , admin:true});
@@ -132,10 +134,12 @@ export const uploadProduct = TryCatch( async(req,res,next)=>{
     if(!product) return next(new ErrorHandler("Invalid Product",404));
 
     if(photo){
+        const photoUri = getDataUri(photo);
+        const mycloud = await cloudinary.v2.uploader.upload(photoUri.content!);
         rm(product.photo!,()=>{
             console.log('Photo Removed');
-        })
-        product.photo = photo.path
+        });
+        product.photo = mycloud.secure_url;
     }
 
     if(name)product.name = name;

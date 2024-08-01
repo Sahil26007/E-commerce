@@ -17,7 +17,7 @@ const CartItem = ({cartItem,incrementHandler,decrementHandler,removeHandler }:Ca
   return (
     <div className="cart-item">
 
-      <img src={`${server}/${photo}`} alt={name} />
+      <img src={`${photo}`} alt={name} />
       <article>
         <Link to ={`/product/${productId}`}>{name}</Link>
         <span>₹{price}</span>

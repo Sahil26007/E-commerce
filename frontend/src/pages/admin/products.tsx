@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 import { Column } from "react-table";
 import TableHOC from "../../components/admin/TableHOC";
 import { useAllProductsQuery } from "../../redux/api/productApi";
-import { server } from "../../redux/store";
 import toast from "react-hot-toast";
 import { customError } from "../../types/api-types";
 import { useSelector } from "react-redux";
@@ -79,11 +78,13 @@ const Products = () => {
     toast.error(err.data.message)
   }
 
+  console.log(data);
+
   useEffect(() => {
     if(data)
         setRows(
           data.products.map((i) => ({
-            photo: <img src={`${server}/${i.photo}`} />,
+            photo: <img src={`${i.photo}`} />,
             name: i.name,
             price: i.price,
             stock: i.stock,

@@ -45,7 +45,7 @@ export type Order = {
     orderList : orderList[];
     shippingInfo : shippingInfo;
     subtotal :number;
-    total :number;
+    amount :number;
     tax:number;
     shippingCharges:number;
     discount:number;

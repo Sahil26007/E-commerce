@@ -19,7 +19,7 @@ const defaultData: Order = {
   },
   orderList: [],
   subtotal: 0,
-  total: 0,
+  amount: 0,
   tax: 0,
   shippingCharges: 0,
   discount: 0,
@@ -41,6 +41,7 @@ const TransactionManagement = () => {
 
   const { data, isLoading, isError } = useOrderDetailQuery(params.id!);
 
+
   const {
     shippingInfo: { address, city, state, country, pincode },
     orderList,
@@ -49,9 +50,10 @@ const TransactionManagement = () => {
     tax,
     subtotal,
     discount,
-    total,
+    amount,
     shippingCharges,
   } = data?.order || defaultData;
+
 
 
   const [updateOrder] = useUpdateOrderMutation();
@@ -119,7 +121,7 @@ const TransactionManagement = () => {
           <p>Shipping Charges: {shippingCharges}</p>
           <p>Tax: {tax}</p>
           <p>Discount: {discount}</p>
-          <p>Total: {total}</p>
+          <p>Total: {amount}</p>
 
           <h5>Status Info</h5>
           <p>
