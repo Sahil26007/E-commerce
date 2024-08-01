@@ -33,7 +33,6 @@ const Home = () => {
     toast.success(`Added ${cartItem.name} to Cart!`);
   };
 
-
   if(isError) toast.error("Cannot fetch the Products");
 
   return (

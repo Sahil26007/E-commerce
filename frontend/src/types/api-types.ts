@@ -21,6 +21,7 @@ export type categoryResponse ={
 }
 
 export type allProductResponse={
+    products: any;
     success:boolean,
     product : Product[],
 }
@@ -65,7 +66,9 @@ export type customError = {
     }
 }
 
-export  type searchProductResponse = allProductResponse & {
+export  type searchProductResponse = {
+    success:boolean,
+    products : Product[],
     totalPage : number,
 }
 

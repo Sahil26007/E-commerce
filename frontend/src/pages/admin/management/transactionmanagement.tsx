@@ -29,6 +29,7 @@ const defaultData: Order = {
     _id: "",
   },
   _id: "",
+  quantity: undefined
 };
 
 const TransactionManagement = () => {
